@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>{{ username }}'s Taken Quizzes</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            background-color: #f0f8ff;
+            color: #f0f8ff;
+            background-image: url("{{ url_for('static', filename='cabbages6.jpg') }}");
+            background-size: cover;
+            background-position: top;
+            background-repeat: no-repeat;
+        }
+        .main-container {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            border-radius: 15px;
+            padding: 20px;
+            box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.3);
+            max-width: 600px;
+            width: 90%;
+            text-align: center;
+            background-color: rgba(255, 255, 255, 0.8);
+        }
+        .OutlineText {
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+            color: white;
+            text-shadow:
+                -1px -1px 0 #000000,
+                1px -1px 0 #000000,
+                -1px 1px 0 #000000,
+                1px 1px 0 #000000,
+                -2px 0 0 #000000,
+                2px 0 0 #000000,
+                0 2px 0 #000000,
+                0 -2px 0 #000000;
+        }
+        .quiz-item {
+            border-radius: 15px;
+            padding: 15px;
+            margin: 10px 10px;
+            color: #333;
+            box-shadow: 4px 4px 4px rgba(0, 0, 0, 0.2);
+            width: 80%;
+            max-width: 500px;
+            text-align: center;
+        }
+        .quiz-list {
+            list-style-type: none;
+            padding: 0;
+        }
+        .quiz-button {
+            font-size: 1rem;
+            color: white;
+            background-color: #007bff;
+            border: none;
+            border-radius: 5px;
+            padding: 10px 20px;
+            cursor: pointer;
+            text-decoration: none;
+            display: block;
+            margin: 5px auto;
+            max-width: 200px;
+        }
+        .quiz-button:hover {
+            background-color: #0056b3;
+        }
+        .btn {
+            display: flex;
+            padding: 10px 20px;
+            margin: 10px 0;
+            font-size: 16px;
+            color: white;
+            background-color: #007bff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            text-align: center;
+            text-decoration: none;
+            width: 80%;
+            max-width: 500px;
+        }
+        .btn:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <div class="main-container">
+        <h1 class="OutlineText">Quizzes Taken by {{ username }}</h1>
+
+    <div class="sort-buttons">
+    <a href="{{ url_for('alltakenquizzes', username=username, sort='all')}}" class="sort-button">All</a>
+    <a href="{{ url_for('alltakenquizzes', username=username, sort='recent')}}" class="sort-button">Recent</a>
+    <a href="{{ url_for('alltakenquizzes', username=username, sort='alphabetical')}}" class="sort-button">Alphabetical</a>
+    <a href="{{ url_for('alltakenquizzes', username=username, sort='date')}}" class="sort-button">Date</a>
+</div>
+
+
+        {% if quizzes %}
+            <ul class="quiz-list">
+                {% for quiz in quizzes %}
+                <li class="quiz-item">
+                    <a href="{{ url_for('quiz_score', username=username, quiz_id=quiz['quizId']) }}" class="quiz-button">
+    {{ quiz['quizName'] }}
+</a>
+
+                </li>
+                {% endfor %}
+            </ul>
+        {% else %}
+            <p>No quizzes found for this user.</p>
+        {% endif %}
+
+        <!-- Return -->
+        <a href="{{ url_for('greeting', username=username) }}" class="btn">Back to Dashboard</a>
+    </div>
+</body>
+</html>

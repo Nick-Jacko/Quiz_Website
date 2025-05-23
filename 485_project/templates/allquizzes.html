@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>{{ username }}'s Quizzes</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            background-color: #f0f8ff;
+            color: #f0f8ff;
+            background-image: url("{{ url_for('static', filename='cabbages6.jpg') }}");
+            background-size: 100%;
+            background-position: top;
+            background-repeat: repeat;
+        }
+        .main-container {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            border-radius: 15px;
+            padding: 20px;
+            box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.3); /* Shadow for depth */
+            max-width: 600px;
+            width: 90%; /* Responsive width */
+            text-align: center;
+            background-color: rgba(255, 255, 255, 0.8); /* Semi-transparent white */
+        }
+        .OutlineText {
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+            color: white;
+            text-shadow:
+                -1px -1px 0 #000000,
+                1px -1px 0 #000000,
+                -1px 1px 0 #000000,
+                1px 1px 0 #000000,
+                -2px 0 0 #000000,
+                2px 0 0 #000000,
+                0 2px 0 #000000,
+                0 -2px 0 #000000; /* Terminate with a semi-colon */
+        }
+        .quiz-item {
+            border-radius: 15px; /* Rounded corners */
+            padding: 15px;
+            margin: 10px 10px; /* Space between items */
+            color: #333; /* Text color */
+            box-shadow: 4px 4px 4px rgba(0, 0, 0, 0.2); /* Light shadow for depth */
+            width: 90%; /* Width of the quiz item */
+            max-width: 600px; /* Maximum width */
+            text-align: center;
+            flex-grow: 1;
+        }
+        .quiz-item-display {
+            display: flex;
+            width: 50%;
+            align-items: center;
+        }
+        .quiz-list {
+            list-style-type: none;
+            padding: 0;
+            width: 80%;
+            max-width: 500px;
+            align-items: center;
+        }
+        .quiz-button {
+            font-size: 1rem;
+            color: white;
+            background-color: #007bff;
+            border: none;
+            border-radius: 5px;
+            padding: 10px 20px;
+            cursor: pointer;
+            text-decoration: none;
+            display: block;
+            margin: 5px auto;
+            max-width: 200px;
+        }
+
+        .quiz-button:hover {
+            background-color: #0056b3;
+        }
+        .btn {
+            display: flex;
+            padding: 10px 20px;
+            margin: 10px 0;
+            font-size: 16px;
+            color: white;
+            background-color: #007bff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            text-align: center;
+            text-decoration: none;
+            width: 80%;
+            max-width: 500px;
+        }
+        .btn:hover {
+            background-color: #0056b3;
+        }
+
+        .sort-buttons {
+            margin-bottom: 20px;
+        }
+        .sort-button {
+            padding: 10px 20px;
+            margin: 0 10px;
+            cursor: pointer;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+        }
+        .sort-button:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <div class="main-container">
+        <h1 class="OutlineText">Quizzes Created by {{ username }}</h1>
+
+        <!-- Sort options -->
+        <div class="sort-buttons">
+            <a href="{{ url_for('allquizzes', username=username, sort='all')}}" class="sort-button">All</a>
+            <a href="{{ url_for('allquizzes', username=username, sort='recent')}}" class="sort-button">Recent</a>
+            <a href="{{ url_for('allquizzes', username=username, sort='alphabetical')}}" class="sort-button">Alphabetical</a>
+            <a href="{{ url_for('allquizzes', username=username, sort='date')}}" class="sort-button">Date</a>
+        </div>
+
+
+        {% if message %}
+            <p>{{ message }}</p>
+            
+        {% else %}
+            <ul class="quiz-list">
+                {% for quiz in quizzes %}
+                <li class="quiz-item">
+                    <div class="quiz-item-display"><a href="{{ url_for('view_responses', username=username, quiz_code=quiz[1]) }}" class="quiz-button">{{ quiz[0] }}</a> (Code: {{ quiz[1] }})</div><br>
+                    <caption><i>Created on: {{ quiz[2] or "Not available" }}</i></caption>
+                </li>
+                {% endfor %}
+            </ul>
+            
+        {% endif %}
+
+        <!-- Return Here-->
+        <a href="{{ url_for('greeting', username=username) }}" class="btn">Back to Dashboard</a>
+    </div>
+</body>
+</html>

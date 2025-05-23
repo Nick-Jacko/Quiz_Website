@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Take a Quiz</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f8ff;
+            color: #333;
+            background-image: url("{{ url_for('static', filename='cabbages7.jpg') }}");
+            background-size: cover;
+            background-position: top;
+            background-repeat: no-repeat;
+
+            display: flex;
+            justify-content: center;  /* Horizontally center */
+            align-items: center;      /* Vertically center */
+            
+            margin: 10px;
+        }
+        
+        .btn {
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .btn:hover {
+            background-color: #0056b3;
+        }
+        form {
+           
+           width: 100%;
+           max-width: 300px;
+           align-items: center;
+           display: flex;
+           flex-direction: column;
+           gap: 15px;
+           margin: 10 auto;
+       }
+       .form-container {
+            background-color: white;
+            align-items: center;
+            justify-items: center;
+            border-radius: 15px; /* Round the corners */
+            padding: 30px;
+            width: 100%;
+            max-width: 400px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Form group for label and input aligned horizontally */
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            margin-left: 15px;
+            gap: 10px; /* Space between label and input */
+            width: 100%;
+            
+        }
+        .form-group input {
+            margin: 0;
+            width: 100%;
+            max-width: 300px;
+            align-items: center;
+
+        }
+
+        input[type="text"], input[type="submit"]{
+            padding: 10px;
+            font-size: 1rem;
+            border: 1px solid #ccc; /* Light gray border */
+            border-radius: 5px;
+            width: 300px; /* Set a fixed width */
+            margin-bottom: 15px;
+            transition: border-color 0.3s ease; /* Smooth border color transition */
+            
+        }
+
+        /* Input focus effect */
+        input[type="text"]:focus, input[type="submit"]:focus {
+            border-color: #6bb8f499; /* Green border on focus */
+            outline: none; /* Remove default focus outline */
+        }
+
+    </style>
+</head>
+<body>
+
+<div class="form-container">
+    <h1>Enter Quiz Code</h1>
+    <form method="POST">
+        <input class="form-group" type="text" name="quiz_code" placeholder="Enter Code" required>
+        <button type="submit" class="btn">Submit</button>
+    </form>
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            <ul class="error-messages">
+                {% for category, message in messages %}
+                    <li class="error">{{ message }}</li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+    {% endwith %}
+</div>
+
+</body>
+</html>

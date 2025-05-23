@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Create a New Quiz</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background-color: #f0f8ff;
+            color: #333;
+            background-image: url("{{ url_for('static', filename='cabbages8.jpg') }}");
+            background-size: cover;
+            background-position: top;
+            background-repeat: no-repeat;
+        }
+
+        h1 {
+            color: white;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.7);
+        }
+
+        .container {
+            background: rgba(255, 255, 255, 0.8);
+            padding: 20px;
+            border-radius: 10px;
+            margin-top: 20px;
+            width: 90%;
+            max-width: 600px;
+        }
+
+        label {
+            display: block;
+            margin: 10px 0 5px;
+            font-weight: bold;
+        }
+
+        input[type="text"], select {
+            width: 100%;
+            padding: 10px;
+            margin: 5px 0 20px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-sizing: border-box;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 10px 20px;
+            margin: 10px 5px;
+            font-size: 16px;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            text-align: center;
+            text-decoration: none;
+        }
+
+        .btn-add {
+            background-color: #28a745; /* Green */
+        }
+
+        .btn-add:hover {
+            background-color: #218838;
+        }
+
+        .btn-save {
+            background-color: #007bff; /* Blue */
+        }
+
+        .btn-save:hover {
+            background-color: #0056b3;
+        }
+
+        .btn-danger {
+            background-color: #dc3545;
+        }
+
+        .btn-danger:hover {
+            background-color: #b02a37;
+        }
+
+        .flash.error {
+            color: #dc3545;
+            background-color: #f8d7da;
+            border-color: #f5c6cb;
+            padding: 10px;
+            border-radius: 5px;
+            margin-top: 10px;
+            width: 100%;
+            text-align: center;
+        }
+
+        .error-message {
+            color: red;
+            margin-top: 10px;
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <h1>Create a New Quiz</h1>
+
+    <div class="container">
+        <!-- Display flashed messages -->
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                <div class="flashed-messages">
+                    {% for category, message in messages %}
+                        <div class="flash {{ category }}">{{ message }}</div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        {% endwith %}
+
+        <form id="quiz-form" method="POST" action="{{ url_for('save_quiz') }}">
+            <!-- Add hidden input to pass the username -->
+            <input type="hidden" name="username" value="{{ username }}">
+        
+            <label for="quiz-title">Quiz Title</label>
+            <input type="text" id="quiz-title" name="quiz_title" placeholder="Enter the quiz title" required>
+        
+            <label for="quiz-type">Select Quiz Type</label>
+            <select id="quiz-type" name="quiz-type" onchange="handleQuizTypeChange()">
+                <option value="true-false">True/False</option>
+            </select>
+        
+            <div id="questions-container">
+                <!-- Question fields will be dynamically added here -->
+            </div>
+        
+            <button type="button" class="btn btn-add" onclick="addQuestion()">Add Question</button>
+            <button type="submit" class="btn btn-save">Save Quiz</button>
+            <a href="{{ url_for('greeting', username=username) }}" class="btn btn-danger">Exit</a>
+        </form>
+        <div class="error-message" id="error-message">You need at least 1 question</div>
+    </div>
+
+    <script>
+        let questionCount = 0;
+
+        function handleQuizTypeChange() {
+            // Reset questions container when quiz type changes
+            document.getElementById('questions-container').innerHTML = '';
+            questionCount = 0;
+        }
+
+        function addQuestion() {
+            questionCount++;
+            const container = document.getElementById('questions-container');
+            const quizType = document.getElementById('quiz-type').value;
+
+            // Create a wrapper div for the question and delete button
+            const questionWrapper = document.createElement('div');
+            questionWrapper.setAttribute('id', `question-${questionCount}`);
+            questionWrapper.style.marginBottom = '20px';
+
+            // Add question label and input
+            const questionLabel = document.createElement('label');
+            questionLabel.textContent = `Question ${questionCount}`;
+            questionWrapper.appendChild(questionLabel);
+
+            const questionInput = document.createElement('input');
+            questionInput.setAttribute('type', 'text');
+            questionInput.setAttribute('name', 'questions[]');
+            questionInput.setAttribute('placeholder', 'Enter your question here');
+            questionInput.required = true;
+            questionWrapper.appendChild(questionInput);
+
+            // Add answer options for true/false quiz type
+            const answerLabel = document.createElement('label');
+            answerLabel.textContent = 'Answer';
+            questionWrapper.appendChild(answerLabel);
+
+            const answerSelect = document.createElement('select');
+            answerSelect.setAttribute('name', 'answers[]');
+            answerSelect.required = true;
+
+            const trueOption = document.createElement('option');
+            trueOption.setAttribute('value', 'True');
+            trueOption.textContent = 'True';
+            answerSelect.appendChild(trueOption);
+
+            const falseOption = document.createElement('option');
+            falseOption.setAttribute('value', 'False');
+            falseOption.textContent = 'False';
+            answerSelect.appendChild(falseOption);
+
+            questionWrapper.appendChild(answerSelect);
+
+            // Add a delete button for the question
+            const deleteButton = document.createElement('button');
+            deleteButton.setAttribute('type', 'button');
+            deleteButton.className = 'btn btn-danger';
+            deleteButton.textContent = 'Delete Question';
+            deleteButton.onclick = () => deleteQuestion(questionWrapper);
+            questionWrapper.appendChild(deleteButton);
+
+            container.appendChild(questionWrapper);
+            renumberQuestions();
+        }
+
+        function deleteQuestion(questionWrapper) {
+            const container = document.getElementById('questions-container');
+            container.removeChild(questionWrapper);
+            renumberQuestions();
+        }
+
+        function renumberQuestions() {
+            const container = document.getElementById('questions-container');
+            const questionWrappers = container.children;
+            for (let i = 0; i < questionWrappers.length; i++) {
+                const questionWrapper = questionWrappers[i];
+                const questionLabel = questionWrapper.querySelector('label');
+                questionLabel.textContent = `Question ${i + 1}`;
+            }
+            questionCount = questionWrappers.length;
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Quiz Score</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            background-color: #f0f8ff;
+            padding: 20px;
+        }
+        .score-container {
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            max-width: 400px;
+            margin: auto;
+        }
+        .score-container h1 {
+            margin-bottom: 20px;
+        }
+        .score-container p {
+            font-size: 1.2rem;
+        }
+        .btn {
+            display: inline-block;
+            margin-top: 20px;
+            padding: 10px 20px;
+            color: #fff;
+            background-color: #007bff;
+            border: none;
+            border-radius: 5px;
+            text-decoration: none;
+            font-size: 1rem;
+        }
+        .btn:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+</head>
+<body>
+    <h1>Quiz Score for {{ username }}</h1>
+    <h2>{{ quiz_name }}</h2>
+    <p>You scored {{ correct_responses }} out of {{ total_responses }}.</p>
+
+    <h3>Your Responses:</h3>
+    <ul>
+        {% for question_num, user_answer in user_responses %}
+            <li>Question {{ question_num }}: {{ user_answer }}</li>
+        {% endfor %}
+    </ul>
+
+    <h3>Correct Responses:</h3>
+<ul>
+    {% for question_num, user_answer in user_responses %}
+        <li>Question {{ question_num }}: {{ correct_answers[question_num] }}</li>
+    {% endfor %}
+</ul>
+
+
+
+<!--HEre-->
+    <a href="/alltakenquizzes/{{ username }}">Back to Taken Quizzes</a>
+</body>
+</html>

@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Greeting Landing Page</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background-color: #f0f8ff;
+            color: #333;
+            background-image: url("{{ url_for('static', filename='cabbages1.jpg') }}");
+            background-size: cover;
+            background-position: top;
+            background-repeat: no-repeat;
+        }
+
+        h1 {
+            color: white;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.7);
+        }
+
+        .container {
+            background: rgba(255, 255, 255, 0.8);
+            padding: 20px;
+            border-radius: 10px;
+            margin-top: 20px;
+            width: 90%;
+            max-width: 600px;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 10px 20px;
+            margin: 10px 0;
+            font-size: 16px;
+            color: white;
+            background-color: #007bff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            text-align: center;
+            text-decoration: none;
+        }
+
+        .btn:hover {
+            background-color: #0056b3;
+        }
+
+        .btn2 {
+            display: inline-block;
+            padding: 10px 20px;
+            margin: 10px 0;
+            font-size: 25px;
+            color: white;
+            background-color: #4CAF50;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            text-align: center;
+            text-decoration: none;
+        }
+
+        .btn2:hover {
+            background-color: #45a049;
+        }
+
+        ul {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        li {
+            margin: 10px 0;
+            font-size: 16px;
+        }
+
+        .section-header {
+            font-weight: bold;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Howdy, {{ username }}, welcome to your quiz site!</h1>
+
+    <!-- Create Quiz Button -->
+    <div class="newquizbtn">
+        <a href="{{ url_for('createquiz', username=username) }}" class="btn2">Create New Quiz</a>
+    </div>
+    <div class="newquizbtn">
+        <a href="{{ url_for('takequiz', username=username) }}" class="btn2">Take a Quiz</a>
+    </div>
+
+    <!-- Container for recent quizzes -->
+    <div class="container">
+        <div>
+            <h2 class="section-header">Recently Created Quizzes</h2>
+            <ul>
+                {% for quiz in recent_created_quizzes %}
+                    <li>{{ quiz.title }}</li>
+                {% endfor %}
+            </ul>
+            <a href="{{ url_for('allquizzes', username=username) }}" class="btn">See All Created Quizzes</a>
+        </div>
+    </div>
+
+    <!-- Container for recently taken quizzes -->
+    <div class="container">
+        <div>
+            <h2 class="section-header">Recently Taken Quizzes</h2>
+            <ul>
+                {% for quiz in recent_taken_quizzes %}
+                    <li>{{ quiz.title }}</li>
+                {% endfor %}
+            </ul>
+            <a href="{{ url_for('alltakenquizzes', username=username) }}" class="btn">See All Taken Quizzes and Stats</a>
+        </div>
+    </div>
+</body>
+</html>

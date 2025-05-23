@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Quiz Results</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f8ff;
+            color: #333;
+            background-image: url("{{ url_for('static', filename='cabbages7.jpg') }}");
+            background-size: cover;
+            background-position: top;
+            background-repeat: no-repeat;
+
+            display: flex;
+            justify-content: center;  /* Horizontally center */
+            align-items: center;      /* Vertically center */
+            
+            margin: 10px;
+        }
+        .container {
+            background-color: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            max-width: 600px;
+            width: 100%;
+            text-align: center;
+        }
+        .result {
+            margin: 10px 0;
+            font-size: 1.2rem;
+        }
+        .correct {
+            color: green;
+        }
+        .incorrect {
+            color: red;
+        }
+        .btn {
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            text-decoration: none;
+        }
+        .btn:hover {
+            background-color: #0056b3;
+        }
+        .correct-answer {
+            font-weight: bold;
+            color: #333;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Quiz Results</h1>
+        {% for result in results %}
+            <div class="result {{ 'correct' if result.correct else 'incorrect' }}">
+                Question {{ result.question_num }}: {{ 'Correct' if result.correct else 'Incorrect' }}<br>
+                Your Answer: {{ result.user_answer }}<br>
+                Correct Answer: <span class="correct-answer">{{ result.correct_answer }}</span>
+            </div>
+        {% endfor %}
+        <a href="{{ url_for('greeting', username=username) }}" class="btn">Go to Dashboard</a>
+    </div>
+</body>
+</html>

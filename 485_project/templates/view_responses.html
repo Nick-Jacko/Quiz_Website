@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>View Responses</title>
+</head>
+<body>
+<table>
+    <thead>
+        <tr>
+            <th>User ID</th>
+            <th>Question Number</th>
+            <th>Response</th>
+            <th>Timestamp</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for response in responses %}
+        <tr>
+            <td>{{ response[0] }}</td>
+            <td>{{ response[1] }}</td>
+            <td>{{ response[2] }}</td>
+            <td>{{ response[3] }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+</body>
+</html>e>
+</body>
+</html>

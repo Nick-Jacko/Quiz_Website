@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Start Quiz</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f8ff;
+            color: #f0f8ff;
+            font-weight: bold;
+            text-shadow: 1px 1px 2px #000, 0 0 1em #00f, 0 0 0.2em #00f;
+
+            background-image: url("{{ url_for('static', filename='cabbages8.jpg') }}");
+            background-size: cover;
+            background-position: top;
+            background-repeat: no-repeat;
+
+            display: flex;
+            justify-content: center;  /* Horizontally center */
+            align-items: center;      /* Vertically center */
+            
+            margin: 10px;
+        }
+        .OutlineText {
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+            color: white;
+            text-shadow:
+            /* Outline */
+            -1px -1px 0 #000000,
+            1px -1px 0 #000000,
+            -1px 1px 0 #000000,
+            1px 1px 0 #000000,  
+            -2px 0 0 #000000,
+            2px 0 0 #000000,
+            0 2px 0 #000000,
+            0 -2px 0 #000000; /* Terminate with a semi-colon */
+        }
+        .container {
+            margin-top: 50px;
+            text-align: center;
+        }
+        .question {
+            margin-bottom: 20px;
+        }
+        .btn {
+            padding: 10px 20px;
+            background-color: #28a745;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .btn:hover {
+            background-color: #218838;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1 class="OutlineText">Quiz Questions</h1>
+    <form method="POST" action="{{ url_for('submit_quiz', username=username, quiz_code=quiz_code) }}">
+    {% for i, question in enumerate(questions) %}
+    <div class="question-block">
+        <p>{{ question['question'] }}</p>
+        {% for choice in question['choices'] %}
+            {% if choice %}
+                <label>
+                    <input type="radio" name="question_{{ i }}" value="{{ choice }}" required> {{ choice }}
+                </label>
+            {% endif %}
+        {% endfor %}
+    </div>
+{% endfor %}
+
+    <button type="submit" class="btn">Submit Quiz</button>
+</form>
+
+</div>
+
+</body>
+</html>

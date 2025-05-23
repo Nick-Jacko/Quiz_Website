@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Share Quiz</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background-color: #f0f8ff;
+            color: #333;
+            background-image: url("{{ url_for('static', filename='cabbages8.jpg') }}");
+            background-size: cover;
+            background-position: top;
+            background-repeat: no-repeat;
+        }
+
+        h1 {
+            color: white;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.7);
+        }
+
+        .container {
+            background: rgba(255, 255, 255, 0.8);
+            padding: 20px;
+            border-radius: 10px;
+            margin-top: 20px;
+            width: 90%;
+            max-width: 600px;
+            text-align: center;
+        }
+
+        .quiz-info {
+            margin-top: 20px;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 10px 20px;
+            margin: 10px 5px;
+            font-size: 16px;
+            color: white;
+            background-color: #007bff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            text-align: center;
+            text-decoration: none;
+        }
+
+        .btn:hover {
+            background-color: #0056b3;
+        }
+
+        .btn2 {
+            display: inline-block;
+            padding: 10px 20px;
+            margin: 10px 5px;
+            font-size: 16px;
+            color: white;
+            background-color: #4CAF50;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            text-align: center;
+            text-decoration: none;
+        }
+
+        .btn2:hover {
+            background-color: #45a049;
+        }
+
+        .btn-copy {
+            display: inline-block;
+            padding: 10px 20px;
+            margin: 10px 5px;
+            font-size: 16px;
+            color: white;
+            background-color: #ff9800;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            text-align: center;
+            text-decoration: none;
+        }
+
+        .btn-copy:hover {
+            background-color: #e68900;
+        }
+    </style>
+</head>
+<body>
+    <h1>Share Your Quiz</h1>
+    <div class="container">
+        <div class="quiz-info">
+            <p id="quizTitle">Quiz Title: {{ title }}</p>
+            <p id="quizCode">Quiz Code: {{ code }}</p>
+        </div>
+        <button class="btn-copy" onclick="copyQuizCode()">Copy Quiz Code</button>
+        <a href="{{ url_for('createquiz', username=username) }}" class="btn">Create Another Quiz</a>
+        <a href="{{ url_for('greeting', username=username) }}" class="btn2">Go to Dashboard</a>
+    </div>
+
+    <script>
+        function copyQuizCode() {
+            const quizCode = document.getElementById('quizCode').textContent.split(': ')[1];
+            navigator.clipboard.writeText(quizCode).then(() => {
+                alert('Quiz code copied to clipboard!');
+            }).catch(err => {
+                console.error('Failed to copy quiz code: ', err);
+            });
+        }
+    </script>
+</body>
+</html>
